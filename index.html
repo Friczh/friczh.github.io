@@ -1,597 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Profile</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
 
-  <style>
-    /* ── MD3 Light + Emerald Green Tokens ── */
-    :root {
-      --primary:            #006C4C;
-      --on-primary:         #FFFFFF;
-      --primary-container:  #C2F0D8;
-      --on-primary-cont:    #00210F;
-      --surface:            #F4FAF6;
-      --surface-1:          #FFFFFF;
-      --surface-2:          #EDF6F0;
-      --surface-variant:    #DCE5DC;
-      --on-surface:         #191C1A;
-      --on-surface-var:     #404943;
-      --outline:            #707973;
-      --outline-var:        #D8E4DC;
-      --scrim:              rgba(0,0,0,.3);
-      --radius-xl:          28px;
-      --radius-l:           16px;
-      --radius-m:           12px;
-      --radius-s:           8px;
-      --font: 'Roboto', sans-serif;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <script type="importmap">
+        {
+            "imports": {
+                "@material/web/": "https://esm.run/@material/web/"
+            }
+        }
+    </script>
+    <script type="module">
+        import '@material/web/all.js';
+    </script>
 
-    html { scroll-behavior: smooth; }
+    <style>
+        /* === MD3 Design Tokens === */
+        :root {
+            /* Emerald (Light) Theme */
+            --md-sys-color-primary: #006C4A;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-secondary-container: #89F8C7;
+            --md-sys-color-on-secondary-container: #002114;
+            --md-sys-color-surface: #FBFDF9;
+            --md-sys-color-on-surface: #191C1A;
+            --md-sys-color-surface-container: #F0F3EF;
+            --md-sys-color-outline: #707973;
 
-    body {
-      font-family: var(--font);
-      background: var(--surface);
-      color: var(--on-surface);
-      min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-    /* ── Page fade-in ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes pulse-ring {
-      0%   { transform: scale(1);    opacity: .6; }
-      70%  { transform: scale(1.18); opacity: 0;  }
-      100% { transform: scale(1.18); opacity: 0;  }
-    }
-    @keyframes shimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
-    }
+        :root.dark {
+            /* Light Blue (Dark) Theme */
+            --md-sys-color-primary: #82CFFF;
+            --md-sys-color-on-primary: #00344B;
+            --md-sys-color-secondary-container: #004C6B;
+            --md-sys-color-on-secondary-container: #C9E6FF;
+            --md-sys-color-surface: #191C1E;
+            --md-sys-color-on-surface: #E2E2E5;
+            --md-sys-color-surface-container: #1E2022;
+            --md-sys-color-outline: #8C9194;
+        }
 
-    /* ── Header banner ── */
-    .banner {
-      position: relative;
-      height: 180px;
-      background: linear-gradient(135deg, #006C4C 0%, #009966 40%, #00BF7A 80%, #34D49A 100%);
-      overflow: hidden;
-      animation: fadeIn .5s ease both;
-    }
-    .banner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(109,219,172,.18) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(0,191,122,.12) 0%, transparent 60%);
-    }
-    /* Decorative circles */
-    .banner::after {
-      content: '';
-      position: absolute;
-      width: 240px; height: 240px;
-      border-radius: 50%;
-      border: 1px solid rgba(109,219,172,.15);
-      top: -80px; right: -60px;
-    }
+        /* === Layout Styles === */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-    /* ── Main content ── */
-    .content {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 0 16px 40px;
-    }
+        /* Topbar */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: var(--md-sys-color-surface-container);
+            border-bottom: 1px solid var(--md-sys-color-outline);
+            gap: 12px;
+            z-index: 10;
+        }
 
-    /* ── Identity block ── */
-    .identity {
-      padding-top: 64px;
-      text-align: center;
-      animation: fadeUp .5s .25s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-    }
-    .identity .name {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--on-surface);
-      letter-spacing: -.3px;
-      line-height: 1.2;
-    }
-    .identity .handle {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--primary);
-      margin-top: 4px;
-      letter-spacing: .3px;
-    }
-    .identity .tagline {
-      font-size: 13px;
-      color: var(--on-surface-var);
-      margin-top: 6px;
-      font-weight: 300;
-    }
+        .spacer { flex-grow: 1; }
 
-    /* ── Status chip ── */
-    .status-row {
-      display: flex;
-      justify-content: center;
-      margin-top: 14px;
-      animation: fadeUp .5s .35s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-    }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--primary-container);
-      color: var(--on-primary-cont);
-      border: 1px solid rgba(109,219,172,.2);
-      letter-spacing: .3px;
-    }
-    .chip .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      flex-shrink: 0;
-      animation: pulse-ring 2s ease infinite;
-    }
+        /* Discord Status Chip */
+        .status-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline);
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-    /* ── Section label ── */
-    .section-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--outline-var);
-    }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+        .status-dot.online { background-color: #23a559; }
+        .status-dot.idle { background-color: #f0b232; }
+        .status-dot.dnd { background-color: #f23f43; }
+        .status-dot.offline { background-color: #80848e; }
 
-    /* ── Cards ── */
-    .card {
-      box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-      background: var(--surface-1);
-      border: 1px solid var(--outline-var);
-      border-radius: var(--radius-l);
-      padding: 20px;
-      margin-top: 16px;
-    }
+        /* Main Content & Drawer */
+        .layout-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
 
-    /* Bio card */
-    .bio-card {
-      animation: fadeUp .5s .45s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-    }
-    .bio-text {
-      font-size: 14px;
-      line-height: 1.75;
-      color: var(--on-surface-var);
-      font-weight: 400;
-    }
-    .bio-text strong {
-      color: var(--on-surface);
-      font-weight: 500;
-    }
+        .drawer {
+            background-color: var(--md-sys-color-surface-container);
+            width: 250px;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* Stats row */
-    .stats-card {
-      animation: fadeUp .5s .55s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    .stat-item {
-      padding: 18px 12px;
-      text-align: center;
-      position: relative;
-    }
-    .stat-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: 0; top: 20%; bottom: 20%;
-      width: 1px;
-      background: var(--outline-var);
-    }
-    .stat-num {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 11px;
-      color: var(--on-surface-var);
-      margin-top: 4px;
-      letter-spacing: .3px;
-    }
+        .drawer.closed {
+            width: 0;
+            opacity: 0;
+        }
 
-    /* Info rows */
-    .info-card {
-      animation: fadeUp .5s .65s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-      padding: 8px 20px;
-    }
-    .info-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--outline-var);
-    }
-    .info-row:last-child { border-bottom: none; }
-    .info-icon {
-      font-size: 20px;
-      color: var(--primary);
-      font-variation-settings: 'FILL' 1;
-      flex-shrink: 0;
-    }
-    .info-body { flex: 1; min-width: 0; }
-    .info-label {
-      font-size: 11px;
-      color: var(--on-surface-var);
-      letter-spacing: .4px;
-      text-transform: uppercase;
-    }
-    .info-value {
-      font-size: 14px;
-      color: var(--on-surface);
-      font-weight: 500;
-      margin-top: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+        main {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
 
-    /* ── FAB-style action button ── */
-    .action-row {
-      animation: fadeUp .5s .75s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    .btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px;
-      border-radius: var(--radius-l);
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: .3px;
-      cursor: pointer;
-      border: none;
-      position: relative;
-      overflow: hidden;
-      transition: filter .15s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active { filter: brightness(.88); }
-    .btn-primary {
-      background: var(--primary);
-      color: var(--on-primary);
-    }
-    .btn-secondary {
-      background: var(--surface-2);
-      color: var(--on-surface);
-      border: 1px solid var(--outline);
-    }
-    .btn .material-symbols-rounded { font-size: 18px; }
-
-    /* Ripple */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple-anim .5s linear;
-      background: rgba(0,108,76,.15);
-      pointer-events: none;
-    }
-    @keyframes ripple-anim {
-      to { transform: scale(4); opacity: 0; }
-    }
-
-    /* ── MUI Wiggle Circular Progress Loader ── */
-    .loader-overlay {
-      position: fixed;
-      inset: 0;
-      background: var(--surface);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      z-index: 9999;
-      transition: opacity .35s ease, visibility .35s ease;
-    }
-    .loader-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-    .loader-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--on-surface-var);
-      letter-spacing: .4px;
-    }
-    /* Rotating SVG wrapper — matches MUI's circular-rotate */
-    @keyframes mui-circular-rotate {
-      0%   { transform: rotate(0deg);   }
-      100% { transform: rotate(360deg); }
-    }
-    /* Stroke wiggle — matches MUI's circular-dash */
-    @keyframes mui-circular-dash {
-      0% {
-        stroke-dasharray:  1px, 200px;
-        stroke-dashoffset: 0;
-      }
-      50% {
-        stroke-dasharray:  100px, 200px;
-        stroke-dashoffset: -15px;
-      }
-      100% {
-        stroke-dasharray:  100px, 200px;
-        stroke-dashoffset: -125px;
-      }
-    }
-    .mui-circular-progress {
-      width: 48px;
-      height: 48px;
-      animation: mui-circular-rotate 1.4s linear infinite;
-      display: block;
-    }
-    .mui-circular-progress circle {
-      stroke: var(--primary);
-      stroke-linecap: round;
-      fill: none;
-      stroke-width: 3.6;
-      animation: mui-circular-dash 1.4s ease-in-out infinite;
-    }
-
-    /* ── Footer ── */
-    .footer {
-      text-align: center;
-      margin-top: 32px;
-      font-size: 11px;
-      color: var(--outline);
-      letter-spacing: .3px;
-      animation: fadeIn .5s .9s ease both;
-      opacity: 0;
-      animation-fill-mode: both;
-    }
-
-    /* ── Tablet tweaks ── */
-    @media (min-width: 600px) {
-      .banner { height: 220px; }
-      .avatar  { width: 110px; height: 110px; font-size: 42px; }
-      .avatar-wrap { bottom: -55px; }
-      .identity { padding-top: 72px; }
-      .identity .name { font-size: 30px; }
-      .content { padding: 0 24px 56px; }
-      .card { padding: 24px; }
-    }
-  </style>
+        /* Responsive: Expand Down on Mobile, Side on Desktop */
+        @media (max-width: 768px) {
+            .layout-body {
+                flex-direction: column;
+            }
+            .drawer {
+                width: 100%;
+                max-height: 500px; /* Arbitrary large max-height for animation */
+            }
+            .drawer.closed {
+                width: 100%;
+                max-height: 0;
+                padding: 0;
+            }
+            #top-tabs {
+                display: none; /* Hide main tab on mobile to save space, relies on menu */
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- MUI Wiggle Circular Loader -->
-  <div class="loader-overlay" id="loader">
-    <svg class="mui-circular-progress" viewBox="22 22 44 44">
-      <circle cx="44" cy="44" r="20.2" stroke-dasharray="1px, 200px" stroke-dashoffset="0"/>
-    </svg>
-    <span class="loader-label">Loading profile…</span>
-  </div>
+    <header>
+        <md-icon-button id="menu-btn">
+            <md-icon>menu</md-icon>
+        </md-icon-button>
+        
+        <md-tabs id="top-tabs">
+            <md-primary-tab>Project</md-primary-tab>
+        </md-tabs>
 
-  <!-- Banner -->
-  <div class="banner"></div>
+        <div class="spacer"></div>
 
-  <!-- Content -->
-  <div class="content">
-
-    <!-- Identity -->
-    <div class="identity">
-      <div class="name">Friczh</div>
-      <div class="handle">@friczh</div>
-      <div class="tagline">Livin' in the Internet</div>
-    </div>
-
-    <!-- Stats -->
-    <div class="card stats-card">
-      <div class="stat-item">
-        <div class="stat-num">128</div>
-        <div class="stat-label">Projects</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">3.4k</div>
-        <div class="stat-label">Followers</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">5yr</div>
-        <div class="stat-label">Experience</div>
-      </div>
-    </div>
-
-    <!-- Bio -->
-    <div class="card bio-card">
-      <div class="section-label">About</div>
-      <p class="bio-text">
-        Hey there! I'm <strong>Friczh</strong>, a developer that just stepped into the Internet. I deeply interested about <strong>working with random coding things</strong>, especially with Better Lyrics project • by boidu.
-      </p>
-    </div>
-
-    <!-- Info rows -->
-    <div class="card info-card">
-      <div class="section-label">Info</div>
-
-      <div class="info-row">
-        <span class="material-symbols-rounded info-icon">location_on</span>
-        <div class="info-body">
-          <div class="info-label">Location</div>
-          <div class="info-value">Dak Lak, Vietnam</div>
+        <div class="status-chip">
+            <div id="status-dot" class="status-dot offline"></div>
+            <span id="status-text">Connecting...</span>
         </div>
-      </div>
 
-      <div class="info-row">
-        <span class="material-symbols-rounded info-icon">work</span>
-        <div class="info-body">
-          <div class="info-label">Occupation</div>
-          <div class="info-value">Student/Beginner Coder</div>
-        </div>
-      </div>
+        <md-icon-button id="theme-btn">
+            <md-icon id="theme-icon">dark_mode</md-icon>
+        </md-icon-button>
+    </header>
 
-      <div class="info-row">
-        <span class="material-symbols-rounded info-icon">mail</span>
-        <div class="info-body">
-          <div class="info-label">Email</div>
-          <div class="info-value">Private</div>
-        </div>
-      </div>
+    <div class="layout-body">
+        <nav id="drawer" class="drawer closed">
+            <md-list>
+                <md-list-item type="button">
+                    <div slot="headline">Project</div>
+                    <md-icon slot="start">folder</md-icon>
+                </md-list-item>
+                <md-list-item type="button">
+                    <div slot="headline">About</div>
+                    <md-icon slot="start">person</md-icon>
+                </md-list-item>
+                <md-list-item type="button">
+                    <div slot="headline">Contact</div>
+                    <md-icon slot="start">mail</md-icon>
+                </md-list-item>
+            </md-list>
+        </nav>
 
-      <div class="info-row">
-        <span class="material-symbols-rounded info-icon">link</span>
-        <div class="info-body">
-          <div class="info-label">Website</div>
-          <div class="info-value">friczh.github.io/profile</div>
-        </div>
-      </div>
+        <main>
+            <h1>Hello!</h1>
+            <p>This layout automatically adapts: the menu expands to the <b>side</b> on computers and drops <b>downward</b> on mobile.</p>
+        </main>
     </div>
 
-    <!-- Action buttons -->
-    <div class="action-row">
-      <button class="btn btn-primary" id="msgBtn">
-        <span class="material-symbols-rounded">chat_bubble</span>
-        Message
-      </button>
-      <button class="btn btn-secondary" id="shareBtn">
-        <span class="material-symbols-rounded">share</span>
-        Share
-      </button>
-    </div>
+    <script>
+        // === Theme Toggle Logic ===
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        const root = document.documentElement;
 
-    <div class="footer">Inspired of boidu's work • boidu.dev</div>
-
-  </div>
-
-  <script>
-    // Dismiss loader on page ready
-    function dismissLoader() {
-      var loader = document.getElementById('loader');
-      if (loader) loader.classList.add('hidden');
-    }
-    if (document.readyState === 'complete') {
-      setTimeout(dismissLoader, 600);
-    } else {
-      window.addEventListener('load', function() {
-        setTimeout(dismissLoader, 600);
-      });
-    }
-
-    // Ripple effect
-    function addRipple(btn) {
-      btn.addEventListener('click', function(e) {
-        var r = document.createElement('span');
-        r.className = 'ripple';
-        var rect = btn.getBoundingClientRect();
-        var size = Math.max(rect.width, rect.height);
-        r.style.cssText = [
-          'width:' + size + 'px',
-          'height:' + size + 'px',
-          'left:' + (e.clientX - rect.left - size/2) + 'px',
-          'top:' + (e.clientY - rect.top - size/2) + 'px'
-        ].join(';');
-        btn.appendChild(r);
-        setTimeout(function() { r.remove(); }, 600);
-      });
-    }
-    document.querySelectorAll('.btn').forEach(addRipple);
-
-    // Share button — copy page URL
-    document.getElementById('shareBtn').addEventListener('click', function() {
-      var url = window.location.href;
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(url).then(function() {
-          showToast('Link copied!');
+        themeBtn.addEventListener('click', () => {
+            root.classList.toggle('dark');
+            if (root.classList.contains('dark')) {
+                themeIcon.innerText = 'light_mode';
+            } else {
+                themeIcon.innerText = 'dark_mode';
+            }
         });
-      } else {
-        var t = document.createElement('textarea');
-        t.value = url;
-        t.style.cssText = 'position:fixed;opacity:0';
-        document.body.appendChild(t);
-        t.select();
-        document.execCommand('copy');
-        document.body.removeChild(t);
-        showToast('Link copied!');
-      }
-    });
 
-    // Toast
-    function showToast(msg) {
-      var existing = document.querySelector('.toast');
-      if (existing) existing.remove();
-      var t = document.createElement('div');
-      t.className = 'toast';
-      t.textContent = msg;
-      t.style.cssText = [
-        'position:fixed', 'bottom:24px', 'left:50%',
-        'transform:translateX(-50%) translateY(8px)',
-        'background:#191C1A', 'color:#F4FAF6',
-        'padding:10px 20px', 'border-radius:99px',
-        'font:500 13px/1 Roboto,sans-serif',
-        'border:1px solid #404943',
-        'opacity:0', 'transition:opacity .2s,transform .2s',
-        'z-index:999', 'white-space:nowrap',
-        'box-shadow:0 4px 16px rgba(0,0,0,.4)'
-      ].join(';');
-      document.body.appendChild(t);
-      requestAnimationFrame(function() {
-        t.style.opacity = '1';
-        t.style.transform = 'translateX(-50%) translateY(0)';
-      });
-      setTimeout(function() {
-        t.style.opacity = '0';
-        t.style.transform = 'translateX(-50%) translateY(8px)';
-        setTimeout(function() { t.remove(); }, 200);
-      }, 2200);
-    }
-  </script>
+        // === Drawer Expansion Logic ===
+        const menuBtn = document.getElementById('menu-btn');
+        const drawer = document.getElementById('drawer');
 
+        menuBtn.addEventListener('click', () => {
+            drawer.classList.toggle('closed');
+        });
+
+        // === Live Discord Status via Lanyard WebSocket ===
+        // Using WebSockets instead of REST for instantaneous "Live" updates
+        const DISCORD_ID = "705981418928472153";
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        const statusMap = {
+            online: 'Online',
+            idle: 'Idle',
+            dnd: 'Do Not Disturb',
+            offline: 'Offline'
+        };
+
+        function connectLanyard() {
+            const ws = new WebSocket('wss://api.lanyard.rest/socket');
+            let heartbeatInterval;
+
+            ws.onmessage = (event) => {
+                const msg = JSON.parse(event.data);
+
+                if (msg.op === 1) { // Hello from server
+                    // Send initialize payload
+                    ws.send(JSON.stringify({
+                        op: 2,
+                        d: { subscribe_to_id: DISCORD_ID }
+                    }));
+                    // Start heartbeat
+                    heartbeatInterval = setInterval(() => {
+                        ws.send(JSON.stringify({ op: 3 }));
+                    }, msg.d.heartbeat_interval);
+                } 
+                else if (msg.t === 'INIT_STATE' || msg.t === 'PRESENCE_UPDATE') {
+                    // Update UI with live status
+                    const status = msg.d.discord_status;
+                    statusDot.className = `status-dot ${status}`;
+                    statusText.innerText = statusMap[status] || 'Unknown';
+                }
+            };
+
+            ws.onclose = () => {
+                clearInterval(heartbeatInterval);
+                statusDot.className = 'status-dot offline';
+                statusText.innerText = 'Disconnected';
+                // Try to reconnect after a short delay
+                setTimeout(connectLanyard, 5000);
+            };
+        }
+
+        // Initialize Lanyard connection
+        connectLanyard();
+    </script>
 </body>
 </html>
